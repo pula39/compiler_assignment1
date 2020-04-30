@@ -1,11 +1,13 @@
+3.0
 int main(){
-    int a = 1;
-    float b = 3.0;
-    int c = -1;
-    if(a < b){
-        c = -2;
+    int integer = 1;
+    float floaty = 3.0;
+    int intere = -1;
+    "integer";
+    if(interer < floaty){
+        intere = -2;
     } else {
-        c = 3;
+        intere = 3;
     }
 }
 

@@ -1,15 +1,11 @@
-from enum import Enum, auto
 from collections import defaultdict
 
-class TokenKind(Enum):
-    pass
-
-
-class dfa():
-    def __init__(self):
+class Dfa():
+    def __init__(self, type):
         self.states = []
         self.finite_states = []
-        self.rules =  defaultdict({})
+        self.rules = defaultdict(dict)
+        self.type = type
 
     def set_states(self, state_list):
         self.states = state_list
@@ -17,55 +13,90 @@ class dfa():
     def set_finite_states(self, finite_state_list):
         self.finite_states = finite_state_list
 
-    def add_rule(self, state_number, transit_literal_list, to_state):
-        self.rules[state_number][transit_literal_list] = to_state
+    def add_rule(self, from_state, to_state, transit_literal_list):
+        self.rules[from_state][transit_literal_list] = to_state
+
+    def set_cut_tokens(self, cut_tokens):
+        self.cut_tokens = cut_tokens
 
     def try_accept(self, code, start_pos):
-        accepted = self.accept_this(self, 0, code[start_pos:], 0)
+        accepted = self.accept_this(0, code[start_pos:], 0)
+
+        if accepted is None:
+            return None
+        else:
+            end_pos = start_pos + accepted
+            print(f"accepted to {start_pos} -> {end_pos}")
+            print(code[start_pos:end_pos])
+            return (self.type, code[start_pos:end_pos], end_pos)
 
     def accept_this(self, current_state, code, current_pos):
-        current_literal = code[current_pos]
+        current_literal = code[current_pos:current_pos+1]
 
-        current_state.finite_states()
+        literal_left = current_literal is not ''
 
-        for rule_literal_list, rule_state in self.rules[current_state]:
-            if current_literal not in rule_literal_list:
-                continue
+        has_rule = False
 
-            accept_end_pos = self.accept_this(self, rule_state, code, current_pos + 1)
+        # 글자가 남아있으면 돌려본다.
+        if literal_left:
+            for rule_literal_list, rule_state in self.rules[current_state].items():
+                if current_literal not in rule_literal_list:
+                    continue
 
-            if accept_end_pos is None:
-                continue
+                has_rule = True
+                accept_end_pos = self.accept_this(rule_state, code, current_pos + 1)
 
-            return accept_end_pos
+                if accept_end_pos is None:
+                    continue
 
-        # 받아주는 게 없으면 false
+                return accept_end_pos
 
-        return None
+        # 남아있는 글자로 갈 규칙이 있었는데, 위에서 return 되지 않았음 -> Accept 된 규칙이 없음. 실패.
+        if has_rule:
+            return None
 
-
-
-class token_scanner():
-    def __init__(self, source_code):
-        self.code = source_code
-        self.start_pos = 0
-        self.end_pos = 0
-        self.parsed_token = []
-
-    def parse_next(self):
-        parsed = get_current_token()
-
-
-    def reset_end_pos(self):
-        self.start_pos = self.end_pos
-
-    def parse_token(self):
-        if
-        if self.has_valid_token():
-            self.
-            return self.code[self.start_pos, self.end_pos]
+        # 글자가 남아있는게 없거나 그 글자에 해당되는 Rule이 없을 때
+        if current_state in self.finite_states:
+            return current_pos
         else:
             return None
 
-    def has_valid_token(self):
-        if()
+
+class TokenScanner():
+    def __init__(self, source_code):
+        self.code = source_code
+        self.start_pos = 0
+        self.parsed_token = []
+        self.dfa_list = []
+
+    def parse_next(self):
+        parsed = self.get_current_token()
+
+        if parsed is None:
+            print("Parse Failed")
+            return False
+
+        self.parsed_token.append(parsed)
+
+    def add_dfa(self, dfa):
+        self.dfa_list.append(dfa)
+
+    def parse_end(self):
+        return self.start_pos == len(self.code)
+
+    def parse_token(self):
+        for dfa in self.dfa_list:
+            ret = dfa.try_accept(self.code, self.start_pos)
+
+            if ret is None:
+                continue
+
+            ret_type, ret_value, end_pos = ret
+
+            print(f"parse success. {ret}. start_pos adjusted to {end_pos}")
+            self.start_pos = end_pos
+            return (ret_type, ret_value)
+
+        print(f"parse failed. for {self.code[self.start_pos:]}")
+
+        return None
