@@ -16,9 +16,6 @@ class Dfa():
     def add_rule(self, from_state, to_state, transit_literal_list):
         self.rules[from_state][transit_literal_list] = to_state
 
-    def set_cut_tokens(self, cut_tokens):
-        self.cut_tokens = cut_tokens
-
     def try_accept(self, code, start_pos):
         accepted = self.accept_this(0, code[start_pos:], 0)
 
