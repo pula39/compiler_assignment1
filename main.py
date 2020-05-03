@@ -46,6 +46,13 @@ def set_dfa(token_scanner):
 
     token_scanner.add_dfa(arth_dfa)
 
+    # arithmatic with one token
+    token_scanner.add_dfa(make_single_dfa("plus", "+"))
+    token_scanner.add_dfa(make_single_dfa("minus", "-"))
+    token_scanner.add_dfa(make_single_dfa("devide", "/"))
+    token_scanner.add_dfa(make_single_dfa("mod", "%"))
+
+    # 괄호들
     token_scanner.add_dfa(make_single_dfa("LPAREN", "("))
     token_scanner.add_dfa(make_single_dfa("RPAREN", ")"))
     token_scanner.add_dfa(make_single_dfa("LCURBRACKET", "{"))
