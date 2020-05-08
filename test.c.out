@@ -1,2 +1,16 @@
-error at line number 1, column -6.
-55555.
+('integer', 'int')
+('blank', ' ')
+('identifier', 'abc333')
+('compare', '=')
+('float', '-0.3')
+('digits', '21')
+('arith', '+')
+('arith', '-')
+('identifier', 'a')
+('arith', '-')
+('digits', '5')
+('arith', '-')
+('arith', '-')
+('identifier', 'b')
+('arith', '+')
+('float', '-3.2')

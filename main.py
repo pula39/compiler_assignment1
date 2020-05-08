@@ -36,7 +36,7 @@ def set_dfa(token_scanner):
     token_scanner.add_dfa(make_system_dfa("else", "else"))
 
     # arthimatic
-    arth_dfa = Dfa("arthimatic")
+    arth_dfa = Dfa("compare")
     arth_dfa.set_final_states([1, 2, 11])
     arth_dfa.add_rule(0, 1, "<>")
     arth_dfa.add_rule(1, 2, "=")
@@ -50,10 +50,10 @@ def set_dfa(token_scanner):
     token_scanner.add_dfa(arth_dfa)
 
     # arithmatic with one token
-    token_scanner.add_dfa(make_single_dfa("plus", "+"))
-    token_scanner.add_dfa(make_single_dfa("minus", "-"))
-    token_scanner.add_dfa(make_single_dfa("devide", "/"))
-    token_scanner.add_dfa(make_single_dfa("mod", "%"))
+    token_scanner.add_dfa(make_single_dfa("arith", "+"))
+    token_scanner.add_dfa(make_single_dfa("arith", "-"))
+    token_scanner.add_dfa(make_single_dfa("arith", "/"))
+    token_scanner.add_dfa(make_single_dfa("arith", "%"))
 
     # 괄호들
     token_scanner.add_dfa(make_single_dfa("LPAREN", "("))
@@ -154,6 +154,26 @@ def main(file_path):
             break;
 
         token_list.append(ret)
+
+
+        if len(token_list) > 1 \
+            and (token_list[-1][0] in ["digits", "float"] and "-" in token_list[-1][1]):
+            print(1)
+            # 그 이전에 Number 가 바로 나오면 쪼갠다
+            # 그렇지 않으면 유지
+            finding_token = None
+            for i in range(len(token_list) - 1, 0, -1):
+                i = i - 1 # range 반복 값 보정.
+                if token_list[i][0] == "blank":
+                    continue
+
+                finding_token = token_list[i]
+                break
+
+            if finding_token[0] in ["digits", "float", "identifier"]:
+                print(f"split {token_list[-1]}")
+                token_list[-1] = (token_list[-1][0], token_list[-1][1].replace("-", ""))
+                token_list.insert(-1, ("arith", "-"))
 
         print(ret)
 
