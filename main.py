@@ -241,8 +241,8 @@ def main(file_path):
                     f.writelines(map(lambda t: f"{t}\n", token_list))
             else:
                 end_pos = token_scanner.start_pos
-                all_lines = literal_list[0:end_pos + 1];
-                line_number = len(all_lines.splitlines());
+                all_lines = literal_list[0:end_pos + 1]
+                line_number = len(all_lines.splitlines())
 
                 literal_list_lines = literal_list.splitlines()
                 print(literal_list_lines, literal_list_lines[0:line_number])
@@ -261,10 +261,9 @@ def main(file_path):
 
                 pass
 
-            break;
+            break
 
         token_list.append(ret)
-
 
         if len(token_list) > 1 \
             and (token_list[-1][0] in ["digits", "float"] and "-" in token_list[-1][1]):
@@ -274,6 +273,7 @@ def main(file_path):
             finding_token = None
             for i in range(len(token_list) - 1, 0, -1):
                 i = i - 1 # range 반복 값 보정.
+                # 블랭크는 제외하고 찾는다.
                 if token_list[i][0] == "blank":
                     continue
 
@@ -284,8 +284,6 @@ def main(file_path):
                 print(f"split {token_list[-1]}")
                 token_list[-1] = (token_list[-1][0], token_list[-1][1].replace("-", ""))
                 token_list.insert(-1, ("arith", "-"))
-
-        print(ret)
 
 if __name__ == "__main__":
     if(len(sys.argv) < 2):
