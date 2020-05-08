@@ -62,7 +62,7 @@ def set_dfa(token_scanner):
 
     # system keword (Vtype)
     vtype_dfa = Dfa("Vtype")
-    vtype_dfa.set_final_states([3, 7, 11, 14, 19])
+    vtype_dfa.set_final_states([3, 7, 11, 16])
     vtype_dfa.add_rule(0, 1, "i")
     vtype_dfa.add_rule(1, 2, "n")
     vtype_dfa.add_rule(2, 3, "t")
@@ -73,18 +73,15 @@ def set_dfa(token_scanner):
     vtype_dfa.add_rule(6, 7, "r")
 
     vtype_dfa.add_rule(0, 8, "b")
-    vtype_dfa.add_rule(9, 9, "o")
+    vtype_dfa.add_rule(8, 9, "o")
     vtype_dfa.add_rule(9, 10, "o")
     vtype_dfa.add_rule(10, 11, "l")
-    vtype_dfa.add_rule(11, 12, "e")
-    vtype_dfa.add_rule(12, 13, "a")
-    vtype_dfa.add_rule(13, 14, "n")
 
-    vtype_dfa.add_rule(0, 15, "f")
-    vtype_dfa.add_rule(15, 16, "l")
-    vtype_dfa.add_rule(16, 17, "o")
-    vtype_dfa.add_rule(17, 18, "a")
-    vtype_dfa.add_rule(18, 19, "t")
+    vtype_dfa.add_rule(0, 12, "f")
+    vtype_dfa.add_rule(12, 13, "l")
+    vtype_dfa.add_rule(13, 14, "o")
+    vtype_dfa.add_rule(14, 15, "a")
+    vtype_dfa.add_rule(15, 16, "t")
     token_scanner.add_dfa(vtype_dfa)
 
 
@@ -110,7 +107,7 @@ def set_dfa(token_scanner):
 
     # comparison operators
     comp_dfa = Dfa("Comparison operator")
-    comp_dfa.set_final_states([2, 4, 6, 8])
+    comp_dfa.set_final_states([1, 2, 3, 4, 6, 8])
     comp_dfa.add_rule(0, 1, "<")
     comp_dfa.add_rule(1, 2, "=")
     comp_dfa.add_rule(0, 3, ">")
