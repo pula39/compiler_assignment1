@@ -282,7 +282,7 @@ def main(file_path):
                 finding_token = token_list[i]
                 break
 
-            if finding_token[0] in ["Integer", "Float", "ID"]:
+            if (finding_token is not None) and finding_token[0] in ["Integer", "Float", "ID"]:
                 print(f"split {token_list[-1]}")
                 token_list[-1] = (token_list[-1][0], token_list[-1][1].replace("-", ""))
                 token_list.insert(-1, ("Arthimatic operator", "-"))
