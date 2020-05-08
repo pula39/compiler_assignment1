@@ -6,7 +6,7 @@ import os
 # system keword 에 대한 dfa를 자동생성한다.
 def make_system_dfa(name, keyword):
     digit = "1234567890"
-    char = "qwertyuiopasdfghjklzxcvbnm"
+    char = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
     length = len(keyword)
     dfa = Dfa(name)
