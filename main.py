@@ -232,6 +232,8 @@ def main(file_path):
         # Token 한개를 Parsing 해본다.
         ret = token_scanner.parse_token()
         # ret이 None이다 -> 파싱 실패 또는 파싱 종료.
+
+        file_path = file_path.split(".")[0]
         if ret is None:
             if token_scanner.parse_end() is True:
                 print("성공")
