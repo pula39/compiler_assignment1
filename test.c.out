@@ -1,14 +1,4 @@
-('Vtype', 'int')
-('WHITE SPACE', ' ')
-('ID', 'abc333')
-('Assign', '=')
-('float', '-0.321')
-('Arthimatic operator', '+')
-('Arthimatic operator', '-')
-('ID', 'a')
-('Integer', '-5')
-('Arthimatic operator', '-')
-('Arthimatic operator', '-')
-('ID', 'b')
-('Arthimatic operator', '+')
-('float', '-3.2')
+error at line number 2, column 31.
+
+int abc333=-0.321+-a-5--b++3.2.
+

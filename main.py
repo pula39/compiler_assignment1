@@ -186,7 +186,7 @@ def set_dfa(token_scanner):
     token_scanner.add_dfa(literal_dfa)
 
     #float
-    float_dfa = Dfa("float")
+    float_dfa = Dfa("Float")
     float_dfa.set_final_states([5])
     float_dfa.add_rule(0, 1, "-")
     float_dfa.add_rule(0, 2, nz)
@@ -244,17 +244,19 @@ def main(file_path):
                 all_lines = literal_list[0:end_pos + 1]
                 line_number = len(all_lines.splitlines())
 
-                literal_list_lines = literal_list.splitlines()
+                literal_list_lines = literal_list.splitlines(keepends=True)
                 print(literal_list_lines, literal_list_lines[0:line_number])
-                length_line_before = len(''.join(literal_list_lines[0:line_number]))
+                length_line_before = len(''.join(literal_list_lines[0:line_number - 1]))
                 print(length_line_before)
-                local_pos = end_pos - length_line_before
+                local_pos = end_pos - length_line_before + 1
+                print(f"local_pos {local_pos} = end_pos {end_pos} - {length_line_before} + 1")
 
                 str = ""
-                str = str + f"error at line number {line_number}, column {local_pos}.\n"
+                str = str + f"error at line number {line_number}, column {local_pos}.\n\n"
 
                 original_line = literal_list_lines[line_number - 1]
                 str = str + f"{original_line}\n"
+
                 print(str)
                 with open(f"{file_path}.out", "w") as f:
                     f.write(str)
@@ -266,7 +268,7 @@ def main(file_path):
         token_list.append(ret)
 
         if len(token_list) > 1 \
-            and (token_list[-1][0] in ["digits", "float"] and "-" in token_list[-1][1]):
+            and (token_list[-1][0] in ["Integer", "Float"] and "-" in token_list[-1][1]):
             print(1)
             # 그 이전에 Number 가 바로 나오면 쪼갠다
             # 그렇지 않으면 유지
@@ -274,16 +276,16 @@ def main(file_path):
             for i in range(len(token_list) - 1, 0, -1):
                 i = i - 1 # range 반복 값 보정.
                 # 블랭크는 제외하고 찾는다.
-                if token_list[i][0] == "blank":
+                if token_list[i][0] == "WHITE SPACE":
                     continue
 
                 finding_token = token_list[i]
                 break
 
-            if finding_token[0] in ["digits", "float", "identifier"]:
+            if finding_token[0] in ["Integer", "Float", "ID"]:
                 print(f"split {token_list[-1]}")
                 token_list[-1] = (token_list[-1][0], token_list[-1][1].replace("-", ""))
-                token_list.insert(-1, ("arith", "-"))
+                token_list.insert(-1, ("Arthimatic operator", "-"))
 
 if __name__ == "__main__":
     if(len(sys.argv) < 2):
