@@ -24,8 +24,6 @@ class Dfa():
             return None
         else:
             end_pos = start_pos + accepted
-            print(f"accepted to {start_pos} -> {end_pos}")
-            print(code[start_pos:end_pos])
             return (self.type, code[start_pos:end_pos], end_pos)
 
     # 제시된 literal에 대해, accept 하는지 재귀로 확인한다.
@@ -77,6 +75,7 @@ class TokenScanner():
         return self.start_pos == len(self.code)
 
     def parse_token(self):
+        parsed_tokens = []
         # 모든 dfa 중에 parse 성공하는 dfa를 보고, 있으면 return 한다.
         for dfa in self.dfa_list:
             ret = dfa.try_accept(self.code, self.start_pos)
@@ -84,13 +83,20 @@ class TokenScanner():
             if ret is None:
                 continue
 
-            ret_type, ret_value, end_pos = ret
-
-            print(f"parse success. {ret}. start_pos adjusted to {end_pos}")
+            print(f"{ret} accepted to {self.start_pos} -> {ret[2]}, add to parsed_tokens.")
+            parsed_tokens.append(ret)
             # 한 Token Parse 에 성공했으므로, start_pos를 end_pos로 해준다.
+
+        if len(parsed_tokens) > 0:
+            #같은 endpos면 앞에 것이 나옴
+            print(parsed_tokens)
+            longest_match = max(parsed_tokens, key=lambda p: p[2])
+
+            ret_type, ret_value, end_pos = longest_match
+
             self.start_pos = end_pos
+
             return (ret_type, ret_value)
 
         print(f"parse failed. for {self.code[self.start_pos:]}")
-
         return None

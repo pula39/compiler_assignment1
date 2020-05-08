@@ -1,6 +1,7 @@
 import sys
 from classes import *
 import pprint
+import os
 
 # system keword 에 대한 dfa를 자동생성한다.
 def make_system_dfa(name, keyword):
@@ -13,9 +14,6 @@ def make_system_dfa(name, keyword):
 
     for i in range(0, length):
         dfa.add_rule(i,i+1, keyword[i])
-
-    # 시스템 키워드가 나오고 identifier처럼 될 수 있는 글자가 나오면 안된다.
-    dfa.add_rule(length,length+1, digit + char)
 
     return dfa
 
@@ -125,12 +123,38 @@ def main(file_path):
         ret = token_scanner.parse_token()
         # ret이 None이다 -> 파싱 실패 또는 파싱 종료.
         if ret is None:
-            print(f"Parsing이 끝났습니다. Parsing이 성공적으로 끝났나요?{token_scanner.parse_end()}")
-            pprint.pprint(token_list)
+            if token_scanner.parse_end() is True:
+                print("성공")
+                # 성공했을 때의 출력
+                pprint.pprint(token_list)
+                with open(f"{file_path}.out", "w") as f:
+                    f.writelines(map(lambda t: f"{t}\n", token_list))
+            else:
+                end_pos = token_scanner.start_pos
+                all_lines = literal_list[0:end_pos + 1];
+                line_number = len(all_lines.splitlines());
+
+                literal_list_lines = literal_list.splitlines()
+                print(literal_list_lines, literal_list_lines[0:line_number])
+                length_line_before = len(''.join(literal_list_lines[0:line_number]))
+                print(length_line_before)
+                local_pos = end_pos - length_line_before
+
+                str = ""
+                str = str + f"error at line number {line_number}, column {local_pos}.\n"
+
+                original_line = literal_list_lines[line_number - 1]
+                str = str + f"{original_line}\n"
+                print(str)
+                with open(f"{file_path}.out", "w") as f:
+                    f.write(str)
+
+                pass
+
             break;
 
-        if ret[0] is not "blank":
-            token_list.append(ret)
+        token_list.append(ret)
+
         print(ret)
 
 if __name__ == "__main__":
