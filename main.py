@@ -230,13 +230,14 @@ def main(file_path):
         ret = token_scanner.parse_token()
         # ret이 None이다 -> 파싱 실패 또는 파싱 종료.
 
+        filename, file_extension = os.path.splitext(file_path)
+        new_filename = f"{filename}.out"
         if ret is None:
             if token_scanner.parse_end() is True:
                 print("성공")
                 # 성공했을 때의 출력
                 pprint.pprint(token_list)
-                filename, file_extension = os.path.splitext(file_path)
-                with open(f"{filename}.out", "w") as f:
+                with open(new_filename, "w") as f:
                     f.writelines(map(lambda t: f"{t}\n", token_list))
             else:
                 end_pos = token_scanner.start_pos
@@ -257,7 +258,7 @@ def main(file_path):
                 str = str + f"{original_line}\n"
 
                 print(str)
-                with open(f"{file_path}.out", "w") as f:
+                with open(new_filename, "w") as f:
                     f.write(str)
 
                 pass
