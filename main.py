@@ -170,17 +170,17 @@ def set_dfa(token_scanner):
     # boolean
     bool_dfa = Dfa("Boolean")
     bool_dfa.set_final_states([4, 9])
-    literal_dfa.add_rule(0, 1, "t")
-    literal_dfa.add_rule(1, 2, "r")
-    literal_dfa.add_rule(2, 3, "u")
-    literal_dfa.add_rule(3, 4, "e")
+    bool_dfa.add_rule(0, 1, "t")
+    bool_dfa.add_rule(1, 2, "r")
+    bool_dfa.add_rule(2, 3, "u")
+    bool_dfa.add_rule(3, 4, "e")
 
-    literal_dfa.add_rule(0, 5, "f")
-    literal_dfa.add_rule(5, 6, "a")
-    literal_dfa.add_rule(6, 7, "l")
-    literal_dfa.add_rule(7, 8, "s")
-    literal_dfa.add_rule(8, 9, "e")
-    token_scanner.add_dfa(literal_dfa)
+    bool_dfa.add_rule(0, 5, "f")
+    bool_dfa.add_rule(5, 6, "a")
+    bool_dfa.add_rule(6, 7, "l")
+    bool_dfa.add_rule(7, 8, "s")
+    bool_dfa.add_rule(8, 9, "e")
+    token_scanner.add_dfa(bool_dfa)
 
     #float
     float_dfa = Dfa("Float")
