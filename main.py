@@ -30,7 +30,7 @@ def set_dfa(token_scanner):
     digit = "1234567890"
     char = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-    # system keword (Keyword stmt)
+    # system keyword (Keyword stmt)
     stmt_dfa = Dfa("Keyword stmt")
     stmt_dfa.set_final_states([2, 6, 11, 14, 20])
     stmt_dfa.add_rule(0, 1, "i")
@@ -60,7 +60,7 @@ def set_dfa(token_scanner):
     token_scanner.add_dfa(stmt_dfa)
 
 
-    # system keword (Vtype)
+    # system keyword (Vtype)
     vtype_dfa = Dfa("Vtype")
     vtype_dfa.set_final_states([3, 7, 11, 16])
     vtype_dfa.add_rule(0, 1, "i")
