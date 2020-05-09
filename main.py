@@ -236,7 +236,8 @@ def main(file_path):
                 print("성공")
                 # 성공했을 때의 출력
                 pprint.pprint(token_list)
-                with open(f"{file_path}.out", "w") as f:
+                filename, file_extension = os.path.splitext(file_path)
+                with open(f"{filename}.out", "w") as f:
                     f.writelines(map(lambda t: f"{t}\n", token_list))
             else:
                 end_pos = token_scanner.start_pos
