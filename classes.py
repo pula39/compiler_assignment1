@@ -49,10 +49,6 @@ class Dfa():
 
                 return accept_end_pos
 
-        # 남아있는 글자로 갈 규칙이 있었는데, 위에서 return 되지 않았음 -> Accept 된 규칙이 없음. 실패.
-        if has_rule:
-            return None
-
         # 글자가 남아있는게 없거나 그 글자에 해당되는 Rule이 없을 때
         if current_state in self.finite_states:
             return current_pos
