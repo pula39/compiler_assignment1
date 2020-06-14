@@ -1,4 +1,26 @@
 from collections import defaultdict
+from enum import Enum
+
+class Token(Enum):
+    KEYWORD_STMT = "KEYWORD_STMT"
+    V_TYPE = "V_TYPE"
+    ARITH_OP = "ARTHI_OP"
+    BITWISE_OP = "BITWISE_OP"
+    COMPARE_OP = "COMPARE_OP"
+    WHITE_SPACE = "WHITE_SPACE"
+    ASSIGN = "ASSIGN"
+    SEMICOLON = "SEMICOLON"
+    L_PAREN = "L_PAREN"
+    R_PAREN = "R_PAREN"
+    L_CUR_BRACKET = "L_CUR_BRACKET"
+    R_CUR_BRACKET = "R_CUR_BRACKET"
+    COMMA = "COMMA"
+    INTEGER = "INTEGER"
+    LITERAL = "LITERAL"
+    BOOLEAN = "BOOLEAN"
+    FLOAT = "FLOAT"
+    ID = "ID"
+
 
 class Dfa():
     def __init__(self, type):
