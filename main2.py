@@ -68,9 +68,23 @@ def main(file_path):
     print("GOTO TABLE")
     pprint(slr_table.goto_table)
 
-    sa = SyntaxAnalyzer(slr_table, ["ID", "*", "ID", "$"])
+    test_token_list = [
+        ("(", "val", 1),
+        ("(", "val", 2),
+        ("ID", "mknyan", 8),
+        (")", "val", 10),
+        ("$", "val", 11)
+    ]
+    sa = SyntaxAnalyzer(slr_table, test_token_list)
     while True:
-        if sa.parse_one() != True:
+        ret = sa.parse_one()
+        if ret == "END":
+            print("성공적완수")
+            break
+
+        if ret != True:
+            _ret, error_symbol = ret
+            print("에러발생, 바로여기서.", error_symbol)
             break
 
 if __name__ == "__main__":

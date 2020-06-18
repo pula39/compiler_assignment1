@@ -41,14 +41,16 @@ class SLRTable():
         self.transitions[from_state][by_thing] = to_state
 
 ## 테이블 사용 함수
+# TOKEN = (TYPE, VALUE, POS)
+# NONTERMINAL = (TYPE)
     def is_start_symbol(self, symbol):
-        return symbol == "S'"
+        return symbol[0] == "S'"
 
     def is_terminal(self, symbol):
-        return symbol in self.terminals
+        return symbol[0] in self.terminals
 
     def is_non_terminal(self, symbol):
-        return symbol in self.non_terminals
+        return symbol[0] in self.non_terminals
 
     def get_goto(self, cur_state, non_terminal):
         if non_terminal in self.goto_table[cur_state]:
@@ -152,29 +154,33 @@ class SyntaxAnalyzer:
 
         if self.slr_table.is_non_terminal(next_symbol):
             # GOTO 처리
-            next_state = self.slr_table.get_goto(cur_state, next_symbol)
-            print("next_state", next_state)
+            next_non_terminal = next_symbol[0]
+            next_state = self.slr_table.get_goto(cur_state, next_non_terminal)
+            print("GOTO -> next_state", next_state)
 
             if next_state is not None:
                 self.state_stack.append(next_state)
                 self.shifter_index+=1
                 return True
             else:
-                print("에러")
-                return False
+                print("GOTO에서 할 곳이 없어서 에러. 나는 GOTO 과정에서는 에러가 없다고 가정하고있음. (증명은 안됨 ㅎ)")
+                return False, next_symbol
 
 
         if self.slr_table.is_terminal(next_symbol):
-            action = self.slr_table.get_action(cur_state, next_symbol)
+            next_terminal = next_symbol[0]
+            action = self.slr_table.get_action(cur_state, next_terminal)
             if action is None:
-                print("에러")
-                return False
+                print("ACTION에 할 곳이 없어서 에러")
+                return False, next_symbol
             action_type, value = action
             if "REDUCE" == action_type:
                 from_symbol, to_symbols = self.slr_table.get_change_rule(value)
                 from_index, to_index = self.shifter_index - len(to_symbols), self.shifter_index
-                if self.input_symbols[from_index:to_index] == to_symbols:
-                    self.input_symbols = self.input_symbols[:from_index] + [from_symbol] + self.input_symbols[to_index:]
+                input_symbols = list(map(lambda x: x[0], self.input_symbols[from_index:to_index]))
+                print(input_symbols, to_symbols)
+                if input_symbols == to_symbols:
+                    self.input_symbols = self.input_symbols[:from_index] + [(from_symbol,)] + self.input_symbols[to_index:]
 
                     for i in range(len(to_symbols)):
                         self.state_stack.pop()
@@ -183,15 +189,15 @@ class SyntaxAnalyzer:
 
                     return True
                 else:
-                    print("reduce에 문제가 있다")
-                    return False
+                    print("REDUCE과정에서 문제가 있어서 에러")
+                    return False, next_symbol
             elif "SHIFT" == action_type:
                 self.shifter_index = self.shifter_index + 1
                 self.state_stack.append(value)
                 return True
             else:
-                print("불명액션")
-                return False
+                print("미정의액션이라 문제")
+                return False, next_symbol
             # ACTION 처리
             pass
 

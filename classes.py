@@ -114,7 +114,7 @@ class TokenScanner():
 
             self.start_pos = end_pos
 
-            return (ret_type, ret_value)
+            return (ret_type, ret_value, end_pos)
 
         print(f"parse failed. for {self.code[self.start_pos:]}")
         return None
