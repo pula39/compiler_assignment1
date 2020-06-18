@@ -1,7 +1,7 @@
 from collections import defaultdict
 from enum import Enum
 
-class Token(Enum):
+class Token:
     KEYWORD_STMT = "KEYWORD_STMT"
     V_TYPE = "V_TYPE"
     ARTHI_OP = "ARTHI_OP"

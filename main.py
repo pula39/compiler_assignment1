@@ -240,7 +240,9 @@ def main(file_path):
                 # 성공했을 때의 출력
                 pprint.pprint(token_list)
                 with open(new_filename, "w") as f:
-                    f.writelines(map(lambda t: f"{t}\n", token_list))
+                    import json
+                    f.write(json.dumps({"body": token_list}))
+                    # f.writelines(map(lambda t: f"{t}\n", token_list))
             else:
                 end_pos = token_scanner.start_pos
                 all_lines = literal_list[0:end_pos + 1]
