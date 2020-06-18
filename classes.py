@@ -4,7 +4,7 @@ from enum import Enum
 class Token(Enum):
     KEYWORD_STMT = "KEYWORD_STMT"
     V_TYPE = "V_TYPE"
-    ARITH_OP = "ARTHI_OP"
+    ARTHI_OP = "ARTHI_OP"
     BITWISE_OP = "BITWISE_OP"
     COMPARE_OP = "COMPARE_OP"
     WHITE_SPACE = "WHITE_SPACE"
