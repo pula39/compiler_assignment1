@@ -8,7 +8,7 @@ def main(file_path):
         tokens = json.load(f)["body"]
         # f.writelines(map(lambda t: f"{t}\n", token_list))
     print(tokens)
-    
+
     slr_table = SLRTable()
 
     change_rule_list = [
@@ -67,6 +67,11 @@ def main(file_path):
     pprint(slr_table.action_table)
     print("GOTO TABLE")
     pprint(slr_table.goto_table)
+
+    sa = SyntaxAnalyzer(slr_table, ["ID", "*", "ID", "$"])
+    while True:
+        if sa.parse_one() != True:
+            break
 
 if __name__ == "__main__":
     if(len(sys.argv) < 2):

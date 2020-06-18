@@ -40,6 +40,31 @@ class SLRTable():
     def add_transition(self, from_state, to_state, by_thing):
         self.transitions[from_state][by_thing] = to_state
 
+## 테이블 사용 함수
+    def is_start_symbol(self, symbol):
+        return symbol == "S'"
+
+    def is_terminal(self, symbol):
+        return symbol in self.terminals
+
+    def is_non_terminal(self, symbol):
+        return symbol in self.non_terminals
+
+    def get_goto(self, cur_state, non_terminal):
+        if non_terminal in self.goto_table[cur_state]:
+            return self.goto_table[cur_state][non_terminal]
+        else:
+            return None
+
+    def get_action(self, cur_state, terminal):
+        if terminal in self.action_table[cur_state]:
+            return self.action_table[cur_state][terminal]
+        else:
+            return None
+
+    def get_change_rule(self, index):
+        return self.change_rules[index]
+
     ## 테이블 생성 처리 함수
     def add_goto(self, from_state, by_non_terminal, to_state):
         if by_non_terminal not in self.goto_table[from_state]:
@@ -103,3 +128,73 @@ class SLRTable():
                     for terminal in self.follow_sets[start]:
                         self.add_reduce_action(from_state, terminal, change_rule_index)
                     break
+
+
+class SyntaxAnalyzer:
+    def __init__(self, slr_table, input_symbols):
+        self.slr_table = slr_table
+
+        # 첫 state는 무조건 1번
+        self.state_stack = [1]
+        self.input_symbols = input_symbols
+        self.shifter_index = 0
+
+    def parse_one(self):
+        cur_state = self.state_stack[-1]
+        print("InputSymbols", self.input_symbols)
+        print("shifter", self.shifter_index)
+        [next_symbol] = self.input_symbols[self.shifter_index:self.shifter_index+1]
+
+        if self.slr_table.is_start_symbol(next_symbol):
+            print("잘끝났네용")
+
+            return "END"
+
+        if self.slr_table.is_non_terminal(next_symbol):
+            # GOTO 처리
+            next_state = self.slr_table.get_goto(cur_state, next_symbol)
+            print("next_state", next_state)
+
+            if next_state is not None:
+                self.state_stack.append(next_state)
+                self.shifter_index+=1
+                return True
+            else:
+                print("에러")
+                return False
+
+
+        if self.slr_table.is_terminal(next_symbol):
+            action = self.slr_table.get_action(cur_state, next_symbol)
+            if action is None:
+                print("에러")
+                return False
+            action_type, value = action
+            if "REDUCE" == action_type:
+                from_symbol, to_symbols = self.slr_table.get_change_rule(value)
+                from_index, to_index = self.shifter_index - len(to_symbols), self.shifter_index
+                if self.input_symbols[from_index:to_index] == to_symbols:
+                    self.input_symbols = self.input_symbols[:from_index] + [from_symbol] + self.input_symbols[to_index:]
+
+                    for i in range(len(to_symbols)):
+                        self.state_stack.pop()
+
+                    self.shifter_index = from_index
+
+                    return True
+                else:
+                    print("reduce에 문제가 있다")
+                    return False
+            elif "SHIFT" == action_type:
+                self.shifter_index = self.shifter_index + 1
+                self.state_stack.append(value)
+                return True
+            else:
+                print("불명액션")
+                return False
+            # ACTION 처리
+            pass
+
+        print("NO NEXT SYMBOL. 뭔가 잘못되어가고있다.")
+        return False
+
