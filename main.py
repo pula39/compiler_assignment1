@@ -184,7 +184,7 @@ def set_dfa(token_scanner):
 
     #float
     float_dfa = Dfa(Token.FLOAT)
-    float_dfa.set_final_states([5,6])
+    float_dfa.set_final_states([5])
     float_dfa.add_rule(0, 1, "-")
     float_dfa.add_rule(0, 2, nz)
     float_dfa.add_rule(0, 3, "0")
@@ -193,13 +193,11 @@ def set_dfa(token_scanner):
     float_dfa.add_rule(2, 2, digit)
     float_dfa.add_rule(2, 4, ".")
     float_dfa.add_rule(3, 4, ".")
-    float_dfa.add_rule(4, 5, nz)
+    float_dfa.add_rule(4, 5, digit)
     float_dfa.add_rule(5, 5, nz)
     float_dfa.add_rule(5, 6, "0")
     float_dfa.add_rule(6, 5, nz)
-    float_dfa.add_rule(4, 6, "0")
-    float_dfa.add_rule(6, 7, nz)
-    float_dfa.add_rule(7, 5, nz)
+    float_dfa.add_rule(6, 6, "0")
     token_scanner.add_dfa(float_dfa)
 
     #id

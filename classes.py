@@ -25,6 +25,7 @@ class Token:
 class Dfa():
     def __init__(self, type):
         self.states = []
+        # 사실 Finite가 아니라 Final이다.
         self.finite_states = []
         self.rules = defaultdict(dict)
         self.type = type
@@ -55,15 +56,12 @@ class Dfa():
 
         literal_left = current_literal is not ''
 
-        has_rule = False
-
-        # 글자가 남아있으면 돌려본다.
+        # 일단 열심히 돌려서, 매칭되는게 있으면 Return
         if literal_left:
             for rule_literal_list, rule_state in self.rules[current_state].items():
                 if current_literal not in rule_literal_list:
                     continue
 
-                has_rule = True
                 accept_end_pos = self.accept_this(rule_state, code, current_pos + 1)
 
                 if accept_end_pos is None:
@@ -71,7 +69,8 @@ class Dfa():
 
                 return accept_end_pos
 
-        # 글자가 남아있는게 없거나 그 글자에 해당되는 Rule이 없을 때
+        # 글자가 없거나, 그쪽으로 가봤는데 매칭되는게 없다면
+        # Final state면 OK, 아니면 NO
         if current_state in self.finite_states:
             return current_pos
         else:
