@@ -31,34 +31,11 @@ def set_dfa(token_scanner):
     char = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
     # system keyword (Keyword stmt)
-    stmt_dfa = Dfa(Token.KEYWORD_STMT)
-    stmt_dfa.set_final_states([2, 6, 11, 14, 20])
-    stmt_dfa.add_rule(0, 1, "i")
-    stmt_dfa.add_rule(1, 2, "f")
-
-    stmt_dfa.add_rule(0, 3, "e")
-    stmt_dfa.add_rule(3, 4, "l")
-    stmt_dfa.add_rule(4, 5, "s")
-    stmt_dfa.add_rule(5, 6, "e")
-
-    stmt_dfa.add_rule(0, 7, "w")
-    stmt_dfa.add_rule(7, 8, "h")
-    stmt_dfa.add_rule(8, 9, "i")
-    stmt_dfa.add_rule(9, 10, "l")
-    stmt_dfa.add_rule(10, 11, "e")
-
-    stmt_dfa.add_rule(0, 12, "f")
-    stmt_dfa.add_rule(12, 13, "o")
-    stmt_dfa.add_rule(13, 14, "r")
-
-    stmt_dfa.add_rule(0, 15, "r")
-    stmt_dfa.add_rule(15, 16, "e")
-    stmt_dfa.add_rule(16, 17, "t")
-    stmt_dfa.add_rule(17, 18, "u")
-    stmt_dfa.add_rule(18, 19, "r")
-    stmt_dfa.add_rule(19, 20, "n")
-    token_scanner.add_dfa(stmt_dfa)
-
+    token_scanner.add_dfa(make_system_dfa(Token.IF, "if"))
+    token_scanner.add_dfa(make_system_dfa(Token.ELSE, "else"))
+    token_scanner.add_dfa(make_system_dfa(Token.WHILE, "while"))
+    token_scanner.add_dfa(make_system_dfa(Token.FOR, "for"))
+    token_scanner.add_dfa(make_system_dfa(Token.RETURN, "return"))
 
     # system keyword (Vtype)
     vtype_dfa = Dfa(Token.V_TYPE)
@@ -72,11 +49,6 @@ def set_dfa(token_scanner):
     vtype_dfa.add_rule(5, 6, "a")
     vtype_dfa.add_rule(6, 7, "r")
 
-    vtype_dfa.add_rule(0, 8, "b")
-    vtype_dfa.add_rule(8, 9, "o")
-    vtype_dfa.add_rule(9, 10, "o")
-    vtype_dfa.add_rule(10, 11, "l")
-
     vtype_dfa.add_rule(0, 12, "f")
     vtype_dfa.add_rule(12, 13, "l")
     vtype_dfa.add_rule(13, 14, "o")
@@ -86,27 +58,20 @@ def set_dfa(token_scanner):
 
 
     # arthimatic operators
-    arth_dfa = Dfa(Token.ARTHI_OP)
-    arth_dfa.set_final_states([1])
-    arth_dfa.add_rule(0, 1, "-")
-    arth_dfa.add_rule(0, 1, "+")
-    arth_dfa.add_rule(0, 1, "*")
-    arth_dfa.add_rule(0, 1, "/")
-    token_scanner.add_dfa(arth_dfa)
+    addsub_dfa = Dfa(Token.ADDSUB)
+    addsub_dfa.set_final_states([1])
+    addsub_dfa.add_rule(0, 1, "-")
+    addsub_dfa.add_rule(0, 1, "+")
+    token_scanner.add_dfa(addsub_dfa)
 
-    # bitwise operators
-    bit_dfa = Dfa(Token.BITWISE_OP)
-    bit_dfa.set_final_states([2, 4, 5, 6])
-    bit_dfa.add_rule(0, 1, "<")
-    bit_dfa.add_rule(1, 2, "<")
-    bit_dfa.add_rule(0, 3, ">")
-    bit_dfa.add_rule(3, 4, ">")
-    bit_dfa.add_rule(0, 5, "&")
-    bit_dfa.add_rule(0, 6, "|")
-    token_scanner.add_dfa(bit_dfa)
+    multdiv_dfa = Dfa(Token.MULTDIV)
+    multdiv_dfa.set_final_states([1])
+    multdiv_dfa.add_rule(0, 1, "*")
+    multdiv_dfa.add_rule(0, 1, "/")
+    token_scanner.add_dfa(multdiv_dfa)
 
     # comparison operators
-    comp_dfa = Dfa(Token.COMPARE_OP)
+    comp_dfa = Dfa(Token.COMP)
     comp_dfa.set_final_states([1, 2, 3, 4, 6, 8])
     comp_dfa.add_rule(0, 1, "<")
     comp_dfa.add_rule(1, 2, "=")
@@ -133,7 +98,7 @@ def set_dfa(token_scanner):
     token_scanner.add_dfa(make_single_dfa(Token.ASSIGN, "="))
 
     #semicolon
-    semi_dfa = Dfa(Token.SEMICOLON)
+    semi_dfa = Dfa(Token.SEMI)
     semi_dfa.set_final_states([1])
     semi_dfa.add_rule(0, 1, ";")
     token_scanner.add_dfa(semi_dfa)
@@ -141,14 +106,14 @@ def set_dfa(token_scanner):
     # brackets
     token_scanner.add_dfa(make_single_dfa(Token.L_PAREN, "("))
     token_scanner.add_dfa(make_single_dfa(Token.R_PAREN, ")"))
-    token_scanner.add_dfa(make_single_dfa(Token.L_CUR_BRACKET, "{"))
-    token_scanner.add_dfa(make_single_dfa(Token.R_CUR_BRACKET, "}"))
+    token_scanner.add_dfa(make_single_dfa(Token.L_BRACE, "{"))
+    token_scanner.add_dfa(make_single_dfa(Token.R_BRACE, "}"))
 
     # comma
     token_scanner.add_dfa(make_single_dfa(Token.COMMA, ","))
 
     # integer
-    integer_dfa = Dfa(Token.INTEGER)
+    integer_dfa = Dfa(Token.NUM)
     integer_dfa.set_final_states([1, 3])
     integer_dfa.add_rule(0, 1, "0")
     integer_dfa.add_rule(0, 2, "-")
@@ -166,21 +131,6 @@ def set_dfa(token_scanner):
     literal_dfa.add_rule(1, 1, " ")
     literal_dfa.add_rule(1, 2, "\"")
     token_scanner.add_dfa(literal_dfa)
-
-    # boolean
-    bool_dfa = Dfa(Token.BOOLEAN)
-    bool_dfa.set_final_states([4, 9])
-    bool_dfa.add_rule(0, 1, "t")
-    bool_dfa.add_rule(1, 2, "r")
-    bool_dfa.add_rule(2, 3, "u")
-    bool_dfa.add_rule(3, 4, "e")
-
-    bool_dfa.add_rule(0, 5, "f")
-    bool_dfa.add_rule(5, 6, "a")
-    bool_dfa.add_rule(6, 7, "l")
-    bool_dfa.add_rule(7, 8, "s")
-    bool_dfa.add_rule(8, 9, "e")
-    token_scanner.add_dfa(bool_dfa)
 
     #float
     float_dfa = Dfa(Token.FLOAT)
@@ -289,7 +239,7 @@ def main(file_path):
         token_list.append(ret)
 
         if len(token_list) > 1 \
-            and (token_list[-1][0] in [Token.INTEGER, Token.FLOAT] and "-" in token_list[-1][1]):
+            and (token_list[-1][0] in [Token.NUM, Token.FLOAT] and "-" in token_list[-1][1]):
             print(1)
             # 그 이전에 Number 가 바로 나오면 쪼갠다
             # 그렇지 않으면 유지
@@ -303,10 +253,10 @@ def main(file_path):
                 finding_token = token_list[i]
                 break
 
-            if (finding_token is not None) and finding_token[0] in [Token.INTEGER, Token.FLOAT]:
+            if (finding_token is not None) and finding_token[0] in [Token.NUM, Token.FLOAT]:
                 print(f"split {token_list[-1]}")
                 token_list[-1] = (token_list[-1][0], token_list[-1][1].replace("-", ""))
-                token_list.insert(-1, (Token.ARTHI_OP, "-"))
+                token_list.insert(-1, (Token.ADDSUB, "-"))
 
 if __name__ == "__main__":
     if(len(sys.argv) < 2):
