@@ -141,6 +141,8 @@ class SyntaxAnalyzer:
 
         # 첫 state는 무조건 0번
         self.state_stack = [0]
+        self.passed_state = set()
+        self.passed_change_rule = set()
         self.input_symbols = input_symbols
         self.shifter_index = 0
 
@@ -168,13 +170,14 @@ class SyntaxAnalyzer:
                 return True
             else:
                 print("GOTO에서 할 곳이 없어서 에러. 나는 GOTO 과정에서는 에러가 없다고 가정하고있음. (증명은 안됨 ㅎ)")
+                print(self.input_symbols)
                 return False, next_symbol
 
 
         if self.slr_table.is_terminal(next_symbol):
             next_terminal = next_symbol[0]
             action = self.slr_table.get_action(cur_state, next_terminal)
-            print(f"GET ACTION {action} from {cur_state}, {next_terminal}")
+            # print(f"GET ACTION {action} from {cur_state}, {next_terminal}")
             if action is None:
                 print(f"ACTION에 할 곳이 없어서 에러 cur_state {cur_state}, next_terminal {next_terminal}")
                 print(self.input_symbols)
@@ -184,12 +187,16 @@ class SyntaxAnalyzer:
                 from_symbol, to_symbols = self.slr_table.get_change_rule(value)
                 from_index, to_index = self.shifter_index - len(to_symbols), self.shifter_index
                 input_symbols = list(map(lambda x: x[0], self.input_symbols[from_index:to_index]))
-                print(f"REDUCE from {from_symbol} -> to {to_symbols} (input symbols: {input_symbols}")
+                # print(f"REDUCE from {from_symbol} -> to {to_symbols} (input symbols: {input_symbols}")
                 if input_symbols == to_symbols:
-                    self.input_symbols = self.input_symbols[:from_index] + [(from_symbol,)] + self.input_symbols[to_index:]
+                    # print("REDUCE IT", (from_symbol,"NONTERMINAL", next_symbol))
+                    self.input_symbols = self.input_symbols[:from_index] + [(from_symbol,"NONTERMINAL", next_symbol[-1])] + self.input_symbols[to_index:]
 
                     for i in range(len(to_symbols)):
-                        self.state_stack.pop()
+                        popped = self.state_stack.pop()
+                        self.passed_state.add(popped)
+
+                    self.passed_change_rule.add(value)
 
                     self.shifter_index = from_index
 

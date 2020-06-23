@@ -8,18 +8,9 @@ from pprint import pprint
 def main(file_path):
     with open(file_path, "r") as f:
         tokens = json.load(f)["body"]
-        # f.writelines(map(lambda t: f"{t}\n", token_list))
-    print(tokens)
-    # token = TYPE VAL END_POS
-    tokens = list(filter(lambda token: token[0] != Token.WHITE_SPACE, tokens))
 
-    # test_token_list = [
-    #     ("(", "val", 1),
-    #     ("(", "val", 2),
-    #     ("ID", "mknyan", 8),
-    #     (")", "val", 10),
-    #     ("$", "val", 11)
-    # ]
+    print(tokens)
+    tokens = list(filter(lambda token: token[0] != Token.WHITE_SPACE, tokens))
 
     slr_table = SLRTable()
 
@@ -120,7 +111,7 @@ def main(file_path):
         if n not in nfa_list_of_us:
             print(f"{n}이 우리가 만든 DFA에 없어보입니다.")
 
-    # 앱실론에서 shift가 1을 가버리는 NFA 확인 필요
+    # NFA를 옮겨놓은것임
     # (nfa_state_index, shift_index)
     change_rules = [
         ["S",
@@ -193,8 +184,11 @@ def main(file_path):
     non_terminals = []
     change_rule_list = []
     terminals = set()
+
+    # 검증용 데이터
     tran_list_count = 0
     visual_change_rule_dic = defaultdict(list)
+
     for l in change_rules:
         non_terminals.append(l[0])
         for rules, tran_list in l[1:]:
@@ -220,15 +214,6 @@ def main(file_path):
     print("non_terminals", non_terminals)
     print("terminals", terminals)
 
-    # change_rule_list = [
-    #     # Start, [to들(심볼다하나씩잘라서)], [(state_index, shift_index)]
-    #     ("S'", ["E"], [(1, 0), (2, 1)]),
-    #     ("E", ["T", "*", "E"], [(1, 0), (3, 1), (3, 0), (6, 0), (6, 2), (8, 3)]),
-    #     ("E", ["T"], [(1, 0), (3, 1), (4, 0), (6, 0)]),
-    #     ("T", ["(", "E", ")"], [(1, 0), (4, 0), (4, 1), (6, 0), (7, 2), (9, 3)]),
-    #     ("T", ["ID"], [(1, 0), (4, 0), (5, 1), (6, 0)]),
-    # ]
-
     change_counter = 0
     for n, n, t_l in change_rule_list:
         change_counter += len(t_l)
@@ -240,7 +225,7 @@ def main(file_path):
             # State Index에 change Index와 Shift Index의 Tuple을 넣어준다.
             slr_table.add_state_change_rule(state_index, (i, shift_index))
 
-    # FOLLOW SET을 만들어야함
+    # FOLLOW SET 입력
     slr_table.add_follow_set("S", ['$'])
     slr_table.add_follow_set("CODE", ['$'])
     slr_table.add_follow_set("VDECL", ['vtype', 'if', 'while', 'for', 'id', '$', 'rbrace', 'return'])
@@ -261,6 +246,9 @@ def main(file_path):
     slr_table.add_terminals(terminals + ["$"])
     slr_table.add_non_terminals(non_terminals)
 
+    # DFA 입력
+
+    # block_move: T66 포탈을 모아둔거
     block_move = [(35, NT.STMT), (36, NT.VDECL), (37, NT.ASSIGN), (47, Token.IF), (39, Token.WHILE), (40, Token.FOR), ( 41, Token.V_TYPE), (58, Token.ID)]
     trans = [
         (0, [(4, Token.V_TYPE), (1, NT.CODE), (2,NT.VDECL), (3, NT.FDECL)]),
@@ -313,7 +301,7 @@ def main(file_path):
         (69, [(72, NT.BLOCK)] + block_move[:]),
         (70, [(73, Token.R_BRACE)] + block_move[:]),
         (71, [(74, NT.ASSIGN), (58, Token.ID)]),
-        (72, [(75, Token.R_BRACE)] + block_move[:]), #T66 포탈
+        (72, [(75, Token.R_BRACE)] + block_move[:]),
         (73, [(76, Token.R_PAREN)]),
         (74, [(76, Token.R_PAREN)]),
         (75, [(77, NT.ELSE), (78, Token.ELSE)]),
@@ -321,8 +309,8 @@ def main(file_path):
         (78, [(80, Token.L_BRACE)]),
         (79, [(81, NT.BLOCK)] + block_move[:]),
         (80, [(82, NT.BLOCK)] + block_move[:]),
-        (81, [(83, Token.R_BRACE)] + block_move[:]), #T66 포탈 사용
-        (82, [(84, Token.R_BRACE)] + block_move[:]), #T66 포탈 사용
+        (81, [(83, Token.R_BRACE)] + block_move[:]),
+        (82, [(84, Token.R_BRACE)] + block_move[:]),
     ]
 
     for s, t_list in trans:
@@ -343,6 +331,8 @@ def main(file_path):
         ret = sa.parse_one()
         if ret == "END":
             print("성공적완수")
+            print("미방문 STATE", list(filter(lambda x: x not in sa.passed_state, list(range(0,85)))))
+            print("미사용 NFA", list(filter(lambda x: x not in sa.passed_change_rule, list(range(0,185)))))
             break
 
         if ret != True:
