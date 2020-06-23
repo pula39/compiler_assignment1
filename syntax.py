@@ -24,6 +24,9 @@ class SLRTable():
 
     def add_state_change_rule(self, state_id, change_rule_shift_index):
         # 변환규칙은 중복 가능. shift_index 까지 합치면 불가능하다.
+        if change_rule_shift_index in self.state_to_change_rules[state_id]:
+            raise Exception
+
         self.state_to_change_rules[state_id].append(change_rule_shift_index)
 
     def add_follow_set(self, non_terminal, terminals):
