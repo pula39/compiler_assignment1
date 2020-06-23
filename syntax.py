@@ -47,7 +47,7 @@ class SLRTable():
 # TOKEN = (TYPE, VALUE, POS)
 # NONTERMINAL = (TYPE)
     def is_start_symbol(self, symbol):
-        return symbol[0] == "S'"
+        return symbol[0] == "S"
 
     def is_terminal(self, symbol):
         return symbol[0] in self.terminals
@@ -139,15 +139,15 @@ class SyntaxAnalyzer:
     def __init__(self, slr_table, input_symbols):
         self.slr_table = slr_table
 
-        # 첫 state는 무조건 1번
-        self.state_stack = [1]
+        # 첫 state는 무조건 0번
+        self.state_stack = [0]
         self.input_symbols = input_symbols
         self.shifter_index = 0
 
     def parse_one(self):
         cur_state = self.state_stack[-1]
-        print("InputSymbols", self.input_symbols)
-        print("shifter", self.shifter_index)
+        print("parse_one", self.input_symbols)
+        print("self.shifter_index, cur_state", self.shifter_index, cur_state)
         [next_symbol] = self.input_symbols[self.shifter_index:self.shifter_index+1]
 
         if self.slr_table.is_start_symbol(next_symbol):
@@ -157,6 +157,7 @@ class SyntaxAnalyzer:
 
         if self.slr_table.is_non_terminal(next_symbol):
             # GOTO 처리
+            print("is non terminal", cur_state, next_symbol)
             next_non_terminal = next_symbol[0]
             next_state = self.slr_table.get_goto(cur_state, next_non_terminal)
             print("GOTO -> next_state", next_state)
@@ -173,15 +174,17 @@ class SyntaxAnalyzer:
         if self.slr_table.is_terminal(next_symbol):
             next_terminal = next_symbol[0]
             action = self.slr_table.get_action(cur_state, next_terminal)
+            print(f"GET ACTION {action} from {cur_state}, {next_terminal}")
             if action is None:
-                print("ACTION에 할 곳이 없어서 에러")
+                print(f"ACTION에 할 곳이 없어서 에러 cur_state {cur_state}, next_terminal {next_terminal}")
+                print(self.input_symbols)
                 return False, next_symbol
             action_type, value = action
             if "REDUCE" == action_type:
                 from_symbol, to_symbols = self.slr_table.get_change_rule(value)
                 from_index, to_index = self.shifter_index - len(to_symbols), self.shifter_index
                 input_symbols = list(map(lambda x: x[0], self.input_symbols[from_index:to_index]))
-                print(input_symbols, to_symbols)
+                print(f"REDUCE from {from_symbol} -> to {to_symbols} (input symbols: {input_symbols}")
                 if input_symbols == to_symbols:
                     self.input_symbols = self.input_symbols[:from_index] + [(from_symbol,)] + self.input_symbols[to_index:]
 
@@ -204,6 +207,6 @@ class SyntaxAnalyzer:
             # ACTION 처리
             pass
 
-        print("NO NEXT SYMBOL. 뭔가 잘못되어가고있다.")
+        print("NO NEXT SYMBOL. 뭔가 잘못되어가고있다.", next_symbol)
         return False
 
