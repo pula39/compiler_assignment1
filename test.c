@@ -40,10 +40,16 @@ int main(){
     }
     if( i <= 1){
       abc__ = 5.2 - -12.0;
+        while(b < 1){
+        }
     }
   }
+  while(a < 1){
+      while(b < 1){
+      }
+  }
 
-  return 0;
+  return (a + 1);
 }
 
 

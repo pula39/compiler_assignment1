@@ -86,7 +86,7 @@ def main(file_path):
     T67 = [84]
     T68 = [107]
     T69 = [105] + block_trans_with_SMTM[:]
-    T70 = [109] + block_trans_with_SMTM[:]
+    T70 = [109]
     T71 = [110, 18]
     T72 = [108]
     T73 = [116]
@@ -281,7 +281,7 @@ def main(file_path):
         (43, [(52, Token.R_BRACE)]),
         (44, [(53, NT.FACTOR), (17, Token.NUM),(18, Token.ID),(19, Token.FLOAT),(20, Token.L_PAREN)]),
         (47, [(54, Token.L_PAREN)]),
-        (48, [(55, NT.COND), (56, NT.FACTOR)]),
+        (48, [(55, NT.COND), (56, NT.FACTOR), (17, Token.NUM),(18, Token.ID),(19, Token.FLOAT),(20, Token.L_PAREN)]),
         (49, [(58, Token.ID), (57, NT.ASSIGN)]),
         (50, [(9, Token.SEMI), (10, Token.ASSIGN)]),
         (51, [(59, NT.MOREARGS)]),
