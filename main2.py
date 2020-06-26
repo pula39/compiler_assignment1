@@ -326,6 +326,16 @@ def main(file_path):
     pprint(slr_table.action_table)
     print("GOTO TABLE")
     pprint(slr_table.goto_table)
+
+    import pandas as pd
+    action_pd = pd.DataFrame.from_dict(slr_table.action_table).transpose()
+    print(action_pd)
+    action_pd = action_pd.sort_index()
+    action_pd.to_csv("action_pd.csv")
+    goto_pd = pd.DataFrame.from_dict(slr_table.goto_table).transpose()
+    goto_pd = goto_pd.sort_index()
+    print(goto_pd)
+    action_pd.to_csv("goto_pd.csv")
     #
     sa = SyntaxAnalyzer(slr_table, tokens + ["$"])
     while True:
