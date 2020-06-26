@@ -7,7 +7,8 @@ from pprint import pprint
 
 def main(file_path):
     with open(file_path, "r") as f:
-        tokens = json.load(f)["body"]
+        lexical_json = json.load(f)
+        tokens = lexical_json["body"]
 
     print(tokens)
     tokens = list(filter(lambda token: token[0] != Token.WHITE_SPACE, tokens))
@@ -338,6 +339,7 @@ def main(file_path):
         if ret != True:
             _ret, error_symbol = ret
             print("에러발생, 바로여기서.", error_symbol)
+            print(f'[{make_error_report(error_symbol[2], lexical_json["original"])}]')
             break
 
 

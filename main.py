@@ -160,24 +160,6 @@ def set_dfa(token_scanner):
     id_dfa.add_rule(1, 1, digit)
     token_scanner.add_dfa(id_dfa)
 
-def make_error_report(end_pos, all_literals):
-    all_lines = all_literals[0:end_pos + 1]
-    line_number = len(all_lines.splitlines())
-
-    literal_list_lines = all_literals.splitlines(keepends=True)
-    print(literal_list_lines, literal_list_lines[0:line_number])
-    length_line_before = len(''.join(literal_list_lines[0:line_number - 1]))
-    print(length_line_before)
-    local_pos = end_pos - length_line_before + 1
-    print(f"local_pos {local_pos} = end_pos {end_pos} - {length_line_before} + 1")
-
-    str = ""
-    str = str + f"error at line number {line_number}, column {local_pos}.\n\n"
-
-    original_line = literal_list_lines[line_number - 1]
-    str = str + f"{original_line}\n"
-
-    return str
 
 def main(file_path):
     with open(file_path, mode="r") as f:
