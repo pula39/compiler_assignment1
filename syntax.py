@@ -388,7 +388,8 @@ if __name__ == "__main__":
             passed_change_rule += c_list
 
         print("미방문 STATE", list(filter(lambda x: x not in passed_state, list(range(0, 85)))))
-        print("미사용 NFA", list(filter(lambda x: x not in passed_change_rule, list(range(0, 185)))))
+        # 오작동중이라 주석처리
+        # print("미사용 NFA", list(filter(lambda x: x not in passed_change_rule, list(range(0, 185)))))
     else:
         print("File path : " + file_path)
 
