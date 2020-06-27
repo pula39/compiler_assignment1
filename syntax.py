@@ -109,7 +109,7 @@ def main(file_path):
     NFA_NUMBERS = list(range(0, 125))  # 0 ~ 124
     nfa_list_of_us = [y for x in T_LIST for y in x]
     for n in NFA_NUMBERS:
-        if n not in nfa_list_of_us:
+        if n not in [5,41,45,57,121] and n  not in nfa_list_of_us:
             print(f"{n}이 우리가 만든 DFA에 없어보입니다.")
 
     # NFA를 옮겨놓은것임
@@ -211,7 +211,7 @@ def main(file_path):
     terminals = list(filter(lambda symbol: symbol not in non_terminals, list(terminals)))
 
     # print(f"{tran_list_count}개의 nfa 스테이트가 있었읍니다. 제대로 했다면.")
-    pprint(visual_change_rule_dic)
+    # pprint(visual_change_rule_dic)
     # print("non_terminals", non_terminals)
     # print("terminals", terminals)
 
@@ -323,9 +323,9 @@ def main(file_path):
     slr_table.build_action_table()
 
     # print("Action Table")
-    pprint(slr_table.action_table)
+    # pprint(slr_table.action_table)
     # print("GOTO TABLE")
-    pprint(slr_table.goto_table)
+    # pprint(slr_table.goto_table)
 
     import pandas as pd
     action_pd = pd.DataFrame.from_dict(slr_table.action_table).transpose()
