@@ -165,7 +165,7 @@ def main(file_path):
     with open(file_path, mode="r") as f:
         literal_list = f.read()
 
-    print(literal_list)
+    # print(literal_list)
 
     # 읽어온 Source Code를 Parsing 하기 위해 Token Scanner에 전달합니다.
     token_scanner = TokenScanner(literal_list)
@@ -185,9 +185,9 @@ def main(file_path):
         new_filename = f"{filename}.out"
         if ret is None:
             if token_scanner.parse_end() is True:
-                print("성공")
+                # print("성공")
                 # 성공했을 때의 출력
-                pprint.pprint(token_list)
+                # pprint.pprint(token_list)
                 with open(new_filename, "w") as f:
                     import json
                     f.write(json.dumps({"body": token_list, "original": literal_list}))
@@ -222,7 +222,7 @@ def main(file_path):
 
         if len(token_list) > 1 \
             and (token_list[-1][0] in [Token.NUM, Token.FLOAT] and "-" in token_list[-1][1]):
-            print(1)
+            # print(1)
             # 그 이전에 Number 가 바로 나오면 쪼갠다
             # 그렇지 않으면 유지
             finding_token = None
@@ -236,7 +236,7 @@ def main(file_path):
                 break
 
             if (finding_token is not None) and finding_token[0] in [Token.NUM, Token.FLOAT]:
-                print(f"split {token_list[-1]}")
+                # print(f"split {token_list[-1]}")
                 token_list[-1] = (token_list[-1][0], token_list[-1][1].replace("-", ""))
                 token_list.insert(-1, (Token.ADDSUB, "-"))
 

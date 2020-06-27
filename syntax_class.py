@@ -1,8 +1,9 @@
 from _collections import defaultdict
 
 def already_error(dic, key1, key2, val):
-    print(f"You are trying to insert to not empty slot.")
-    print(f"{key1} {key2} already {dic[key1][key2]}. you tried {val}")
+    # print(f"You are trying to insert to not empty slot.")
+    # print(f"{key1} {key2} already {dic[key1][key2]}. you tried {val}")
+    pass
 
 class SLRTable():
     def __init__(self):

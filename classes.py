@@ -120,13 +120,13 @@ class TokenScanner():
             if ret is None:
                 continue
 
-            print(f"{ret} accepted to {self.start_pos} -> {ret[2]}, add to parsed_tokens.")
+            # print(f"{ret} accepted to {self.start_pos} -> {ret[2]}, add to parsed_tokens.")
             parsed_tokens.append(ret)
             # 한 Token Parse 에 성공했으므로, start_pos를 end_pos로 해준다.
 
         if len(parsed_tokens) > 0:
             #같은 endpos면 앞에 것이 나옴
-            print(parsed_tokens)
+            # print(parsed_tokens)
             longest_match = max(parsed_tokens, key=lambda p: p[2])
 
             ret_type, ret_value, end_pos = longest_match
@@ -135,7 +135,7 @@ class TokenScanner():
 
             return (ret_type, ret_value, end_pos)
 
-        print(f"parse failed. for {self.code[self.start_pos:]}")
+        # print(f"parse failed. for {self.code[self.start_pos:]}")
         return None
 
 
