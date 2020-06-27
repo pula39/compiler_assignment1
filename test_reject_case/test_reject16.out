@@ -1,0 +1,1 @@
+{"body": [["id", "void", 4], ["WHITE_SPACE", " ", 5], ["id", "main", 9], ["lparen", "(", 10], ["rparen", ")", 11], ["lbrace", "{", 12], ["WHITE_SPACE", "\n\n    ", 18], ["return", "return", 24], ["semi", ";", 25], ["WHITE_SPACE", "\n", 26], ["rbrace", "}", 27], ["semi", ";", 28], ["WHITE_SPACE", "\n", 29]], "original": "void main(){\n\n    return;\n};\n"}
