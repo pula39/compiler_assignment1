@@ -1,4 +1,4 @@
-int main(int arc){
+int main(){
 
     int i;
     if( a > b){
