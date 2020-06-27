@@ -1,0 +1,1 @@
+{"body": [["vtype", "int", 3], ["WHITE_SPACE", " ", 4], ["id", "main", 8], ["lparen", "(", 9], ["vtype", "char", 13], ["WHITE_SPACE", " ", 14], ["id", "a", 15], ["rparen", ")", 16], ["lbrace", "{", 17], ["WHITE_SPACE", "\n    ", 22], ["semi", ";", 23], ["WHITE_SPACE", "\n", 24], ["rbrace", "}", 25], ["semi", ";", 26]], "original": "int main(char a){\n    ;\n};"}
