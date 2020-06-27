@@ -285,7 +285,7 @@ def main(file_path):
         (48, [(55, NT.COND), (56, NT.FACTOR), (17, Token.NUM),(18, Token.ID),(19, Token.FLOAT),(20, Token.L_PAREN)]),
         (49, [(58, Token.ID), (57, NT.ASSIGN)]),
         (50, [(9, Token.SEMI), (10, Token.ASSIGN)]),
-        (51, [(59, NT.MOREARGS)]),
+        (51, [(59, NT.MOREARGS), (33, Token.COMMA)]),
         (53, [(60, Token.SEMI)]),
         (54, [(61, NT.COND), (56, NT.FACTOR), (17, Token.NUM), (18, Token.ID), (19, Token.FLOAT), (20, Token.L_PAREN)]),
         (55, [(62, Token.R_PAREN)]),
