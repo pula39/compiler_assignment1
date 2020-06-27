@@ -341,13 +341,13 @@ def main(file_path):
     while True:
         ret = sa.parse_one()
         if ret == "END":
-            print("성공적완수")
+            print("ACCEPT")
             return sa.passed_state, sa.passed_change_rule
             break
 
         if ret != True:
             _ret, error_symbol = ret
-            print("에러발생, 바로여기서.", error_symbol)
+            print("SOME ERROR OCCURS.")
             print(f'[{make_error_report(error_symbol[2], lexical_json["original"])}]')
             return [], []
             break
@@ -388,11 +388,9 @@ if __name__ == "__main__":
             passed_change_rule += c_list
 
         print("미방문 STATE", list(filter(lambda x: x not in passed_state, list(range(0, 85)))))
-        # 오작동중이라 주석처리
-        # print("미사용 NFA", list(filter(lambda x: x not in passed_change_rule, list(range(0, 185)))))
     else:
         print("File path : " + file_path)
 
-        drive_file_name(file_path)
+        main(file_path)
 
 

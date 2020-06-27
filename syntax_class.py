@@ -153,7 +153,7 @@ class SyntaxAnalyzer:
         [next_symbol] = self.input_symbols[self.shifter_index:self.shifter_index+1]
 
         if self.slr_table.is_start_symbol(next_symbol):
-            print("잘끝났네용")
+            print("PARSE END")
 
             return "END"
 

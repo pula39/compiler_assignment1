@@ -144,11 +144,11 @@ def make_error_report(end_pos, all_literals):
     line_number = len(all_lines.splitlines())
 
     literal_list_lines = all_literals.splitlines(keepends=True)
-    print(literal_list_lines, literal_list_lines[0:line_number])
+    # print(literal_list_lines, literal_list_lines[0:line_number])
     length_line_before = len(''.join(literal_list_lines[0:line_number - 1]))
-    print(length_line_before)
+    # print(length_line_before)
     local_pos = end_pos - length_line_before + 1
-    print(f"local_pos {local_pos} = end_pos {end_pos} - {length_line_before} + 1")
+    # print(f"local_pos {local_pos} = end_pos {end_pos} - {length_line_before} + 1")
 
     str = ""
     line = "---------------------------\n"
