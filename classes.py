@@ -155,8 +155,8 @@ def make_error_report(end_pos, all_literals):
     str = str + f"error at line number {line_number}, column {local_pos}.\n"
     str += line
 
-    original_line = literal_list_lines[line_number - 1]
-    str = str + f"{original_line}"
+    original_line = literal_list_lines[line_number - 1].rstrip()
+    str = str + f"{original_line}\n"
     str += line
 
     return str
