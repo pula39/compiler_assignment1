@@ -10,7 +10,7 @@ def main(file_path):
         lexical_json = json.load(f)
         tokens = lexical_json["body"]
 
-    print(tokens)
+    # print(tokens)
     tokens = list(filter(lambda token: token[0] != Token.WHITE_SPACE, tokens))
 
     slr_table = SLRTable()
@@ -210,15 +210,15 @@ def main(file_path):
 
     terminals = list(filter(lambda symbol: symbol not in non_terminals, list(terminals)))
 
-    print(f"{tran_list_count}개의 nfa 스테이트가 있었읍니다. 제대로 했다면.")
+    # print(f"{tran_list_count}개의 nfa 스테이트가 있었읍니다. 제대로 했다면.")
     pprint(visual_change_rule_dic)
-    print("non_terminals", non_terminals)
-    print("terminals", terminals)
+    # print("non_terminals", non_terminals)
+    # print("terminals", terminals)
 
     change_counter = 0
     for n, n, t_l in change_rule_list:
         change_counter += len(t_l)
-    print(f"DFA에 있는 change 갯수는 {change_counter}개입니다. 확인해봐요!")
+    # print(f"DFA에 있는 change 갯수는 {change_counter}개입니다. 확인해봐요!")
 
     for start, to, state_infos in change_rule_list:
         i = slr_table.add_change_rule(start, to)
@@ -318,24 +318,24 @@ def main(file_path):
         for to_state, symbol in t_list:
             slr_table.add_transition(s, to_state, symbol)
 
-    print("테이블 준비끝")
+    # print("테이블 준비끝")
     slr_table.build_goto_table()
     slr_table.build_action_table()
 
-    print("Action Table")
+    # print("Action Table")
     pprint(slr_table.action_table)
-    print("GOTO TABLE")
+    # print("GOTO TABLE")
     pprint(slr_table.goto_table)
 
     import pandas as pd
     action_pd = pd.DataFrame.from_dict(slr_table.action_table).transpose()
-    print(action_pd)
+    # print(action_pd)
     action_pd = action_pd.sort_index()
-    action_pd.to_csv("action_pd.csv")
+    action_pd.to_csv(file_path + "_action_pd.csv")
     goto_pd = pd.DataFrame.from_dict(slr_table.goto_table).transpose()
     goto_pd = goto_pd.sort_index()
-    print(goto_pd)
-    action_pd.to_csv("goto_pd.csv")
+    # print(goto_pd)
+    action_pd.to_csv(file_path + "goto_pd.csv")
     #
     sa = SyntaxAnalyzer(slr_table, tokens + ["$"])
     while True:
