@@ -372,17 +372,19 @@ if __name__ == "__main__":
 
     file_path = sys.argv[1]
 
-    if file_path == "test_folder":
+    if file_path == "test_folder" or file_path == "test_reject_case":
         import os
 
         file_list = []
-        for file in os.listdir("test_folder"):
+        folder_name = file_path
+        for file in os.listdir(folder_name):
             if file.endswith(".c"):
-                file_list.append(os.path.join("test_folder\\", file))
+                file_list.append(os.path.join(f"{folder_name}\\", file))
         print("폴더 테스트")
         passed_state = []
         passed_change_rule = []
         for file in file_list:
+            print("TRY ", file)
             s_list, c_list = drive_file_name(file)
             passed_state += s_list
             passed_change_rule += c_list
