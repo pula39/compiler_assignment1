@@ -128,7 +128,7 @@ class SLRTable():
                         break
 
                     if start not in self.follow_sets:
-                        print(f"start {start}의 Follow Sets은 없습니다. 스타트 심벌인가보네요!")
+                        # print(f"start {start}의 Follow Sets은 없습니다. 스타트 심벌인가보네요!")
                         break
                     for terminal in self.follow_sets[start]:
                         self.add_reduce_action(from_state, terminal, change_rule_index)
@@ -148,28 +148,28 @@ class SyntaxAnalyzer:
 
     def parse_one(self):
         cur_state = self.state_stack[-1]
-        print("parse_one", self.input_symbols)
-        print("self.shifter_index, cur_state", self.shifter_index, cur_state)
+        # print("parse_one", self.input_symbols)
+        # print("self.shifter_index, cur_state", self.shifter_index, cur_state)
         [next_symbol] = self.input_symbols[self.shifter_index:self.shifter_index+1]
 
         if self.slr_table.is_start_symbol(next_symbol):
-            print("잘끝났네용")
+            print("PARSE END")
 
             return "END"
 
         if self.slr_table.is_non_terminal(next_symbol):
             # GOTO 처리
-            print("is non terminal", cur_state, next_symbol)
+            # print("is non terminal", cur_state, next_symbol)
             next_non_terminal = next_symbol[0]
             next_state = self.slr_table.get_goto(cur_state, next_non_terminal)
-            print("GOTO -> next_state", next_state)
+            # print("GOTO -> next_state", next_state)
 
             if next_state is not None:
                 self.state_stack.append(next_state)
                 self.shifter_index+=1
                 return True
             else:
-                print("GOTO에서 할 곳이 없어서 에러.")
+                # print("GOTO에서 할 곳이 없어서 에러.")
                 print(self.input_symbols)
                 return False, next_symbol
 
@@ -179,8 +179,8 @@ class SyntaxAnalyzer:
             action = self.slr_table.get_action(cur_state, next_terminal)
             # print(f"GET ACTION {action} from {cur_state}, {next_terminal}")
             if action is None:
-                print(f"ACTION에 할 곳이 없어서 에러 cur_state {cur_state}, next_terminal {next_terminal}")
-                print(self.input_symbols)
+                # print(f"ACTION에 할 곳이 없어서 에러 cur_state {cur_state}, next_terminal {next_terminal}")
+                # print(self.input_symbols)
                 return False, next_symbol
             action_type, value = action
             if "REDUCE" == action_type:
@@ -202,18 +202,18 @@ class SyntaxAnalyzer:
 
                     return True
                 else:
-                    print("REDUCE과정에서 문제가 있어서 에러")
+                    # print("REDUCE과정에서 문제가 있어서 에러")
                     return False, next_symbol
             elif "SHIFT" == action_type:
                 self.shifter_index = self.shifter_index + 1
                 self.state_stack.append(value)
                 return True
             else:
-                print("미정의액션이라 문제")
+                # print("미정의액션이라 문제")
                 return False, next_symbol
             # ACTION 처리
             pass
 
-        print("NO NEXT SYMBOL. 뭔가 잘못되어가고있다.", next_symbol)
+        # print("NO NEXT SYMBOL. 뭔가 잘못되어가고있다.", next_symbol)
         return False, next_symbol
 
